@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Ensure canvas scales nicely */
+    canvas {
+      max-width: 100% !important;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen py-8">
+  <div class="container max-w-5xl mx-auto px-4">
+    
+    <!-- Metric Card 1 -->
+    <div class="bg-white rounded-lg shadow p-6 mb-8">
+      <h2 class="text-xl font-semibold mb-2">Average Base Price by Age</h2>
+      <p class="text-gray-600 mb-4">Shows how the average market price of players (in Crores) varies across different ages, highlighting age groups with higher valuation.</p>
+      <canvas id="chart-0" class="w-full h-64"></canvas>
+    </div>
+    
+    <!-- Metric Card 2 -->
+    <div class="bg-white rounded-lg shadow p-6 mb-8">
+      <h2 class="text-xl font-semibold mb-2">Average Predicted Base Price vs Actual by Age</h2>
+      <p class="text-gray-600 mb-4">Compares the model's predicted price with the actual price across ages to assess prediction accuracy over different age groups.</p>
+      <canvas id="chart-1" class="w-full h-64"></canvas>
+    </div>
+    
+  </div>
+
+  <script>
+    // Data definitions (parsed from the JSON input)
+    const metrics = [
+      {
+        metric: "Average Base Price by Age",
+        description: "Shows how the average market price of players (in Crores) varies across different ages, highlighting age groups with higher valuation.",
+        visualization_type: "time_series",
+        data: [
+          {"Age":18,"avg_base_price":2000000},
+          {"Age":19,"avg_base_price":2000000},
+          {"Age":20,"avg_base_price":2000000},
+          {"Age":21,"avg_base_price":2000000},
+          {"Age":22,"avg_base_price":4928571.428571428},
+          {"Age":23,"avg_base_price":5181818.181818182},
+          {"Age":24,"avg_base_price":5000000},
+          {"Age":25,"avg_base_price":6785714.285714285},
+          {"Age":26,"avg_base_price":5833333.333333333},
+          {"Age":27,"avg_base_price":5000000},
+          {"Age":28,"avg_base_price":5000000},
+          {"Age":29,"avg_base_price":4785714.285714285},
+          {"Age":30,"avg_base_price":5466666.666666667},
+          {"Age":31,"avg_base_price":4000000},
+          {"Age":32,"avg_base_price":3968750},
+          {"Age":33,"avg_base_price":4357142.857142857},
+          {"Age":34,"avg_base_price":5000000},
+          {"Age":35,"avg_base_price":5916666.666666667},
+          {"Age":36,"avg_base_price":7450000},
+          {"Age":37,"avg_base_price":4875000},
+          {"Age":38,"avg_base_price":4550000},
+          {"Age":39,"avg_base_price":6071428.571428572},
+          {"Age":40,"avg_base_price":7857142.857142857},
+          {"Age":41,"avg_base_price":4250000},
+          {"Age":42,"avg_base_price":7142857.142857143},
+          {"Age":43,"avg_base_price":5000000},
+          {"Age":44,"avg_base_price":7500000},
+          {"Age":45,"avg_base_price":6000000},
+          {"Age":46,"avg_base_price":6250000},
+          {"Age":47,"avg_base_price":5000000},
+          {"Age":48,"avg_base_price":5000000},
+          {"Age":49,"avg_base_price":4750000},
+          {"Age":50,"avg_base_price":5000000},
+          {"Age":51,"avg_base_price":3500000},
+          {"Age":52,"avg_base_price":3500000}
+        ]
+      },
+      {
+        metric: "Average Predicted Base Price vs Actual by Age",
+        description: "Compares the model's predicted price with the actual price across ages to assess prediction accuracy over different age groups.",
+        visualization_type: "line_chart",
+        data: [
+          {"Age":18,"avg_actual_price":2000000,"avg_predicted_price":2.379104155370695},
+          {"Age":19,"avg_actual_price":2000000,"avg_predicted_price":0.9415857931244603},
+          {"Age":20,"avg_actual_price":2000000,"avg_predicted_price":1.0593670948879317},
+          {"Age":21,"avg_actual_price":2000000,"avg_predicted_price":2.365488650731705},
+          {"Age":22,"avg_actual_price":4928571.428571428,"avg_predicted_price":3.892425317584757},
+          {"Age":23,"avg_actual_price":5181818.181818182,"avg_predicted_price":3.0025511275016274},
+          {"Age":24,"avg_actual_price":5000000,"avg_predicted_price":2.7132779744665307},
+          {"Age":25,"avg_actual_price":6785714.285714285,"avg_predicted_price":3.5041597179794057},
+          {"Age":26,"avg_actual_price":5833333.333333333,"avg_predicted_price":3.463715206994383},
+          {"Age":27,"avg_actual_price":5000000,"avg_predicted_price":2.407864095277324},
+          {"Age":28,"avg_actual_price":5000000,"avg_predicted_price":2.547423296397672},
+          {"Age":29,"avg_actual_price":4785714.285714285,"avg_predicted_price":2.978738967150474},
+          {"Age":30,"avg_actual_price":5466666.666666667,"avg_predicted_price":3.8158758936919575},
+          {"Age":31,"avg_actual_price":4000000,"avg_predicted_price":3.192916142429886},
+          {"Age":32,"avg_actual_price":3968750,"avg_predicted_price":3.1556818702231477},
+          {"Age":33,"avg_actual_price":4357142.857142857,"avg_predicted_price":3.347306213906416},
+          {"Age":34,"avg_actual_price":5000000,"avg_predicted_price":3.989544913971732},
+          {"Age":35,"avg_actual_price":5916666.666666667,"avg_predicted_price":4.161011568004112},
+          {"Age":36,"avg_actual_price":7450000,"avg_predicted_price":4.144914581863017},
+          {"Age":37,"avg_actual_price":4875000,"avg_predicted_price":3.724400977039949},
+          {"Age":38,"avg_actual_price":4550000,"avg_predicted_price":3.035417741834346},
+          {"Age":39,"avg_actual_price":6071428.571428572,"avg_predicted_price":3.8172319868260556},
+          {"Age":40,"avg_actual_price":7857142.857142857,"avg_predicted_price":3.640704614572232},
+          {"Age":41,"avg_actual_price":4250000,"avg_predicted_price":2.8373544653102734},
+          {"Age":42,"avg_actual_price":7142857.142857143,"avg_predicted_price":4.245356813693219},
+          {"Age":43,"avg_actual_price":5000000,"avg_predicted_price":3.3868202764976956},
+          {"Age":44,"avg_actual_price":7500000,"avg_predicted_price":4.3175},
+          {"Age":45,"avg_actual_price":6000000,"avg_predicted_price":3.2109154833789457},
+          {"Age":46,"avg_actual_price":6250000,"avg_predicted_price":4.095000000000001},
+          {"Age":47,"avg_actual_price":5000000,"avg_predicted_price":3.09},
+          {"Age":48,"avg_actual_price":5000000,"avg_predicted_price":3.7423611111111112},
+          {"Age":49,"avg_actual_price":4750000,"avg_predicted_price":3.2705886309332426},
+          {"Age":50,"avg_actual_price":5000000,"avg_predicted_price":2.769789893070273},
+          {"Age":51,"avg_actual_price":3500000,"avg_predicted_price":2.5288762072675484},
+          {"Age":52,"avg_actual_price":3500000,"avg_predicted_price":2.4700918440820336}
+        ]
+      }
+    ];
+
+    // Helper to create charts
+    function createChart(ctx, config) {
+      return new Chart(ctx, config);
+    }
+
+    // Render each metric
+    metrics.forEach((m, idx) => {
+      const ctx = document.getElementById(`chart-${idx}`).getContext('2d');
+      const labels = m.data.map(d => d.Age);
+      let chartType = 'line';
+      if (m.visualization_type === 'bar_chart') chartType = 'bar';
+      else if (m.visualization_type === 'pie_chart') chartType = 'pie';
+      // time_series and line_chart both map to line
+
+      let datasets = [];
+
+      if (m.visualization_type === 'pie_chart') {
+        // For pie we need a single dataset; using avg_base_price if exists
+        const values = m.data.map(d => d.avg_base_price || d.value);
+        datasets.push({
+          label: m.metric,
+          data: values,
+          backgroundColor: values.map(() => `hsl(${Math.random()*360},70%,70%)`)
+        });
+      } else {
+        // Determine which numeric fields exist besides Age
+        const sample = m.data[0];
+        const numericKeys = Object.keys(sample).filter(k => k !== 'Age');
+        numericKeys.forEach((key, i) => {
+          const values = m.data.map(d => d[key]);
+          const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+          datasets.push({
+            label: key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+            data: values,
+            borderColor: colors[i % colors.length],
+            backgroundColor: colors[i % colors.length] + '33',
+            fill: false,
+            tension: 0.2,
+            pointRadius: 3
+          });
+        });
+      }
+
+      const config = {
+        type: chartType,
+        data: {
+          labels: labels,
+          datasets: datasets
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true, position: 'top' },
+            tooltip: { mode: 'index', intersect: false }
+          },
+          scales: {
+            x: { title: { display: true, text: 'Age' } },
+            y: {
+              title: { display: true, text: m.visualization_type.includes('price') ? 'Price' : '' },
+              beginAtZero: true
+            }
+          }
+        }
+      };
+
+      createChart(ctx, config);
+    });
+  </script>
+</body>
+</html>
