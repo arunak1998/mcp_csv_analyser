@@ -45,11 +45,10 @@ This project demonstrates a powerful **CSV Analysis Agent** built with the **Mod
 ## 📁 Project Structure
 
 csv-analysis-agent/
-├── server/
+├── mcp_agent/
 │ ├── app.py # streamlit
 │ ├── csv_agent.py # CSV analysis logic
 │ ├── dashboard_agent.py # Dashboard generation logic
-├── config.yaml
 └── README.md
 
 text
@@ -66,13 +65,13 @@ text
 ### Installation
 
 1. **Clone the repository**
-git clone https://github.com/yourusername/csv-analysis-agent.git
+git clone https://github.com/arunak1998/mcp_csv_analyser.git
 cd csv-analysis-agent
 
 text
 
 2. **Clone the MCP Server (Private Repository)**
-git clone https://github.com/yourusername/your-mcp-server.git
+git clone https://github.com/arunak1998/your-mcp-server.git
 cd your-mcp-server
 
 text
