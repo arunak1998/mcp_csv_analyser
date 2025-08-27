@@ -71,7 +71,7 @@ cd csv-analysis-agent
 text
 
 2. **Clone the MCP Server (Private Repository)**
-git clone https://github.com/arunak1998/your-mcp-server.git
+git clone https://github.com/arunak1998/mcp_csv_server.git
 cd your-mcp-server
 
 text
@@ -155,14 +155,6 @@ text
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-
-
-
-
-## 🙋‍♂️ Support
-
-- **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/yourusername/csv-analysis-agent/issues)
 
 
 ---
